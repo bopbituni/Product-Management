@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ứng dụng quản lý sản phẩm</title>
+</head>
+<body>
+<h2>Danh sách sản phẩm</h2>
+<div id="list"></div>
+<input id="addPrd" type="text">
+<button id="add" type="button" onclick="addProduct();displayProduct()">Thêm sản phẩm</button>
+<br>
+<input id="renamePrd" type="text">
+<button id="rename" type="button" onclick="renameProduct();displayProduct()">Đổi tên sản phẩm</button>
+<!--<button id="delete" type="button" onclick="deleteProduct(),displayProduct()">Xóa sản phẩm</button>-->
+<div id="view"></div>
+<script>
+    let arrayProduct = [];
+    displayProduct();
+
+    function displayProduct() {
+        let html = "";
+        html += "<table border='1' width='auto' cellspacing='0' cellpadding='3'>";
+        html += "<tr>" +
+            "<td>STT</td>" +
+            "<td>Tên sản phẩm</td>" +
+            "<td>Xóa sản phẩm</td>" +
+            "</tr>";
+        for (let i = 0; i < arrayProduct.length; i++) {
+            html += "<tr>";
+            html += "<td>" + (i + 1) + "</td>" +
+                "<td>" + arrayProduct[i] + "</td>" +
+                "<td>" + "<button id=\"" + i + "\" type=\"button\" onclick=\"deleteProduct(this.id),displayProduct()\">Xóa sản phẩm</button>" + "</td>";
+            html += "</tr>";
+        }
+        document.getElementById("view").innerHTML = html;
+    }
+
+    function addProduct() {
+        let newProduct = document.getElementById("addPrd").value;
+        if (newProduct == "") {
+            alert("Vui lòng nhập tên sản phẩm mới");
+        } else {
+            arrayProduct[arrayProduct.length] = newProduct;
+            alert("Đã thêm sản phẩm mới");
+            document.getElementById("addPrd").value = "";
+        }
+    }
+
+    function findProduct(oldName) {
+        let index = -1;
+        for (i = 0; i < arrayProduct.length; i++) {
+            if (oldName == arrayProduct[i]) {
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    function renameProduct() {
+        let oldName = document.getElementById("renamePrd").value;
+        let index = findProduct(oldName);
+        if (index == -1) {
+            alert("Không tìm thấy sản phẩm");
+        } else {
+            let newName = prompt("Nhập tên sản phẩm mới", '');
+            let exist = false;
+            for (i = 0; i < arrayProduct.length; i++) {
+                if (newName == arrayProduct[i]) {
+                    exist = true;
+                }
+            }
+            if (exist) {
+                alert("Sản phẩm này đã có trong danh sách");
+            } else {
+                arrayProduct[index] = newName;
+                alert("Đã đổi tên sản phẩm");
+            }
+        }
+        document.getElementById("renamePrd").value = "";
+    }
+
+    function deleteProduct(id) {
+        arrayProduct.splice(id, 1);
+        alert("Đã xóa sản phẩm");
+    }
+</script>
+</body>
+</html>
